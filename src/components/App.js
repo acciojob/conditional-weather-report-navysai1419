@@ -1,24 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import WeatherDisplay from './WeatherDisplay';
+import React, { Component } from 'react';
+import './App.css';
 
-const App = () => {
-  // Initialize weather state with default values
-  const [weather, setWeather] = useState({ temperature: 0, conditions: '' });
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      renderBall: false,
+      ballPosition: 0,
+    };
 
-  // Simulating fetching weather data with useEffect
-  useEffect(() => {
-    // Here you can fetch real weather data from an API
-    // For now, we'll use the provided weather input
-    const fetchedWeather = { temperature: 25, conditions: "Sunny" };
-    setWeather(fetchedWeather);
-  }, []);
+    // Bind class methods in the constructor
+    this.buttonClickHandler = this.buttonClickHandler.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+  }
 
-  return (
-    <div>
-      <h1>Weather Report</h1>
-      <WeatherDisplay weather={weather} />
-    </div>
-  );
-};
+  buttonClickHandler() {
+    this.setState({ renderBall: true });
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyDown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  handleKeyDown(event) {
+    if (event.key === 'ArrowRight' && this.state.renderBall) {
+      this.setState((prevState) => ({
+        ballPosition: prevState.ballPosition + 5,
+      }));
+    }
+  }
+
+  renderChoice() {
+    if (this.state.renderBall) {
+      return (
+        <div
+          className="ball"
+          style={{ left: `${this.state.ballPosition}px` }}
+        ></div>
+      );
+    } else {
+      return (
+        <button className="start" onClick={this.buttonClickHandler}>
+          Start Game
+        </button>
+      );
+    }
+  }
+
+  render() {
+    return <div className="container">{this.renderChoice()}</div>;
+  }
+}
 
 export default App;
