@@ -9,11 +9,13 @@ const WeatherDisplay = ({ weather }) => {
   return (
     <div>
       <p style={{ color: temperatureColor }}>Temperature: {temperature}</p>
-      <p>Conditions: {conditions}</p>
+      {/* Ensure that the span element is present for conditions */}
+      <span>Conditions: {conditions}</span>
     </div>
   );
 };
 
 export default WeatherDisplay;
+
 
 
